@@ -29,3 +29,31 @@ VALUES
 (115, 15, 75.00, '2025-03-03');
 
 select * from payments;
+
+-- adding packageid as foreign key --
+
+alter table payments add column packageID INT NOT NULL;
+alter table payments add constraint foreign key(packageID) references package(packageID);
+
+-- setting paymentdate and packageid --
+
+UPDATE Payments SET PaymentDate = '2025-03-14', PackageID = 1001 WHERE CourierID = 101;
+UPDATE Payments SET PaymentDate = '2025-03-18', PackageID = 1002 WHERE CourierID = 102;
+UPDATE Payments SET PaymentDate = '2025-03-16', PackageID = 1003 WHERE CourierID = 103;
+UPDATE Payments SET PaymentDate = '2025-03-10', PackageID = 1004 WHERE CourierID = 104;
+UPDATE Payments SET PaymentDate = '2025-03-18', PackageID = 1005 WHERE CourierID = 105;
+UPDATE Payments SET PaymentDate = '2025-03-14', PackageID = 1006 WHERE CourierID = 106;
+UPDATE Payments SET PaymentDate = '2025-03-17', PackageID = 1007 WHERE CourierID = 107;
+UPDATE Payments SET PaymentDate = '2025-03-07', PackageID = 1008 WHERE CourierID = 108;
+UPDATE Payments SET PaymentDate = '2025-03-23', PackageID = 1009 WHERE CourierID = 109;
+UPDATE Payments SET PaymentDate = '2025-03-14', PackageID = 1010 WHERE CourierID = 110;
+UPDATE Payments SET PaymentDate = '2025-03-25', PackageID = 1011 WHERE CourierID = 111;
+UPDATE Payments SET PaymentDate = '2025-03-18', PackageID = 1012 WHERE CourierID = 112;
+UPDATE Payments SET PaymentDate = '2025-03-08', PackageID = 1013 WHERE CourierID = 113;
+UPDATE Payments SET PaymentDate = '2025-03-23', PackageID = 1014 WHERE CourierID = 114;
+UPDATE Payments SET PaymentDate = '2025-03-16', PackageID = 1015 WHERE CourierID = 115;
+UPDATE Payments SET PaymentDate = '2025-03-21', PackageID = 1016 WHERE CourierID = 116;
+UPDATE Payments SET PaymentDate = '2025-03-18', PackageID = 1017 WHERE CourierID = 117;
+UPDATE Payments SET PaymentDate = '2025-03-14', PackageID = 1018 WHERE CourierID = 118;
+UPDATE Payments SET PaymentDate = '2025-03-18', PackageID = 1019 WHERE CourierID = 119;
+UPDATE Payments SET PaymentDate = '2025-03-14', PackageID = 1020 WHERE CourierID = 120;
