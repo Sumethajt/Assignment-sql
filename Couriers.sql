@@ -34,3 +34,71 @@ VALUES
 (115, 'Oliver Young', '357 Pine St, FL', 'Grace Mitchell', '444 Fir St, GA', 4.1, 'Delivered', 'TRK77665', '2025-03-22', 15);
 
 select * from couriers;
+desc couriers ;
+
+--inserting more values --
+
+INSERT INTO Couriers (CourierID, SenderName, SenderAddress, ReceiverName, ReceiverAddress, Weight, Status, TrackingNumber, DeliveryDate, UserID)
+VALUES 
+(116, 'Isaac Adams', '369 Redwood St, CO', 'Luke Thompson', '222 Beech St, IL', 5.7, 'Shipped', 'TRK10016', '2025-03-23', 9);
+INSERT INTO Couriers (CourierID, SenderName, SenderAddress, ReceiverName, ReceiverAddress, Weight, Status, TrackingNumber, DeliveryDate, UserID)
+VALUES 
+(117, 'Jessica Lee', '147 Cedar St, NC', 'Noah Carter', '555 Redwood St, TX', 5.4, 'In Transit', 'TRK10017', '2025-03-21', 10),
+(118, 'Charlie Brown', '789 Oak St, TX', 'Bruce Wayne', '666 Gotham St, NJ', 7.1, 'Pending', 'TRK10020', '2025-03-25', 3),
+(119, 'Nancy Carter', '753 Maple St, WA', 'Tony Stark', '111 Hero Ave, NY', 8.2, 'Delivered', 'TRK10019', '2025-03-19', 14),
+(120, 'Diana Ross', '159 Maple St, FL', 'Jack Dawson', '777 Fir St, NV', 3.6, 'In Transit', 'TRK10018', '2025-03-20', 4);
+
+alter table Couriers add column Packages VARCHAR(255);
+ALTER TABLE Couriers ADD COLUMN ServiceID INT NOT NULL;
+ALTER TABLE Couriers ADD CONSTRAINT FOREIGN KEY(ServiceID) REFERENCES CourierServices(ServiceID);
+
+-- adding package details --
+UPDATE Couriers SET PackageID = 1000 WHERE CourierID = 101;
+UPDATE Couriers SET PackageID = 1001 WHERE CourierID = 102;
+UPDATE Couriers SET PackageID = 1002 WHERE CourierID = 103;
+UPDATE Couriers SET PackageID = 1003 WHERE CourierID = 104;
+UPDATE Couriers SET PackageID = 1004 WHERE CourierID = 105;
+UPDATE Couriers SET PackageID = 1005 WHERE CourierID = 106;
+UPDATE Couriers SET PackageID = 1006 WHERE CourierID = 107;
+UPDATE Couriers SET PackageID = 1007 WHERE CourierID = 108;
+UPDATE Couriers SET PackageID = 1008 WHERE CourierID = 109;
+UPDATE Couriers SET PackageID = 1009 WHERE CourierID = 110;
+UPDATE Couriers SET PackageID = 1010 WHERE CourierID = 111;
+UPDATE Couriers SET PackageID = 1011 WHERE CourierID = 112;
+UPDATE Couriers SET PackageID = 1012 WHERE CourierID = 113;
+UPDATE Couriers SET PackageID = 1013 WHERE CourierID = 114;
+UPDATE Couriers SET PackageID = 1014 WHERE CourierID = 115;
+UPDATE Couriers SET PackageID =  1015 WHERE CourierID = 116;
+UPDATE Couriers SET PackageID = 1016 WHERE CourierID = 117;
+UPDATE Couriers SET PackageID = 1017 WHERE CourierID = 118;
+UPDATE Couriers SET PackageID = 1018 WHERE CourierID = 119;
+UPDATE Couriers SET PackageID = 1019 WHERE CourierID = 120;
+ALTER TABLE Couriers DROP COLUMN Packages;
+ALTER TABLE Couriers ADD COLUMN PackageID INT NOT NULL;
+ALTER TABLE Couriers ADD CONSTRAINT FOREIGN KEY(PackageID ) REFERENCES Package(PackageID );
+ALTER TABLE Couriers 
+
+-- adding shipment date --
+ADD COLUMN ShipmentDate DATE NOT NULL DEFAULT '2025-01-01';
+UPDATE Couriers SET ShipmentDate = '2025-03-15' WHERE CourierID = 101;
+UPDATE Couriers SET ShipmentDate = '2025-03-19' WHERE CourierID = 102;
+UPDATE Couriers SET ShipmentDate = '2025-03-17' WHERE CourierID = 103;
+UPDATE Couriers SET ShipmentDate = '2025-03-12' WHERE CourierID = 104;
+UPDATE Couriers SET ShipmentDate = '2025-03-19' WHERE CourierID = 105;
+UPDATE Couriers SET ShipmentDate = '2025-03-15' WHERE CourierID = 106;
+UPDATE Couriers SET ShipmentDate = '2025-03-18' WHERE CourierID = 107;
+UPDATE Couriers SET ShipmentDate = '2025-03-08' WHERE CourierID = 108;
+UPDATE Couriers SET ShipmentDate = '2025-03-24' WHERE CourierID = 109;
+UPDATE Couriers SET ShipmentDate = '2025-03-15' WHERE CourierID = 110;
+UPDATE Couriers SET ShipmentDate = '2025-03-26' WHERE CourierID = 111;
+UPDATE Couriers SET ShipmentDate = '2025-03-19' WHERE CourierID = 112;
+UPDATE Couriers SET ShipmentDate = '2025-03-09' WHERE CourierID = 113;
+UPDATE Couriers SET ShipmentDate = '2025-03-24' WHERE CourierID = 114;
+UPDATE Couriers SET ShipmentDate = '2025-03-17' WHERE CourierID = 115;
+UPDATE Couriers SET ShipmentDate = '2025-03-22' WHERE CourierID = 116;
+UPDATE Couriers SET ShipmentDate = '2025-03-19' WHERE CourierID = 117;
+UPDATE Couriers SET ShipmentDate = '2025-03-15' WHERE CourierID = 118;
+UPDATE Couriers SET ShipmentDate = '2025-03-19' WHERE CourierID = 119;
+UPDATE Couriers SET ShipmentDate = '2025-03-15' WHERE CourierID = 120;
+
+ALTER TABLE Couriers DROP COLUMN Weight;
