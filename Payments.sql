@@ -58,10 +58,12 @@ UPDATE Payments SET PaymentDate = '2025-03-14', PackageID = 1018 WHERE CourierID
 UPDATE Payments SET PaymentDate = '2025-03-18', PackageID = 1019 WHERE CourierID = 119;
 UPDATE Payments SET PaymentDate = '2025-03-14', PackageID = 1020 WHERE CourierID = 120;
 
+-- adding ServiceID and updating values--
 alter table payments add column serviceID int null;
 UPDATE Payments p
 JOIN Couriers c ON p.CourierID = c.CourierID
 SET p.ServiceID = c.ServiceID;
+
 alter table payments add constraint foreign key(serviceID) references courierservices(serviceID);
 
 UPDATE Payments p
