@@ -102,3 +102,69 @@ UPDATE Couriers SET ShipmentDate = '2025-03-19' WHERE CourierID = 119;
 UPDATE Couriers SET ShipmentDate = '2025-03-15' WHERE CourierID = 120;
 
 ALTER TABLE Couriers DROP COLUMN Weight;
+
+alter table couriers add column EmployeeID INT NOT NULL;
+
+UPDATE Couriers SET EmployeeID = 1051 WHERE CourierID = 101;
+UPDATE Couriers SET EmployeeID = 2098 WHERE CourierID = 102;
+UPDATE Couriers SET EmployeeID = 3175 WHERE CourierID = 103;
+UPDATE Couriers SET EmployeeID = 4240 WHERE CourierID = 104;
+UPDATE Couriers SET EmployeeID = 5312 WHERE CourierID = 105;
+UPDATE Couriers SET EmployeeID = 6789 WHERE CourierID = 106;
+UPDATE Couriers SET EmployeeID = 7213 WHERE CourierID = 107;
+UPDATE Couriers SET EmployeeID = 8564 WHERE CourierID = 108;
+UPDATE Couriers SET EmployeeID = 9032 WHERE CourierID = 109;
+UPDATE Couriers SET EmployeeID = 10025 WHERE CourierID = 110;
+UPDATE Couriers SET EmployeeID = 11247 WHERE CourierID = 111;
+UPDATE Couriers SET EmployeeID = 12089 WHERE CourierID = 112;
+UPDATE Couriers SET EmployeeID = 13542 WHERE CourierID = 113;
+UPDATE Couriers SET EmployeeID = 14923 WHERE CourierID = 114;
+UPDATE Couriers SET EmployeeID = 15789 WHERE CourierID = 115;
+UPDATE Couriers SET EmployeeID = 1051 WHERE CourierID = 116;
+UPDATE Couriers SET EmployeeID = 2098 WHERE CourierID = 117;
+UPDATE Couriers SET EmployeeID = 3175 WHERE CourierID = 118;
+UPDATE Couriers SET EmployeeID = 4240 WHERE CourierID = 119;
+UPDATE Couriers SET EmployeeID = 5312 WHERE CourierID = 120;
+
+-- add locationId --
+ALTER TABLE Couriers ADD COLUMN LocationID INT;
+alter table couriers ADD CONSTRAINT FOREIGN KEY(LocationID ) REFERENCES Locations(LocationID );
+SET SQL_SAFE_UPDATES = 0;
+SET SQL_SAFE_UPDATES = 1;
+
+-- updating receiver address --
+UPDATE Couriers SET ReceiverAddress = '555 Oak St, TX' WHERE CourierID = 101;
+UPDATE Couriers SET ReceiverAddress = '777 Pine St, CA' WHERE CourierID = 102;
+UPDATE Couriers SET ReceiverAddress = '222 Pine St, WA' WHERE CourierID = 103;
+UPDATE Couriers SET ReceiverAddress = '444 Cedar St, GA' WHERE CourierID = 104;
+UPDATE Couriers SET ReceiverAddress = '666 Redwood St, OR' WHERE CourierID = 105;
+UPDATE Couriers SET ReceiverAddress = '111 Cherry St, NV' WHERE CourierID = 106;
+UPDATE Couriers SET ReceiverAddress = '333 Aspen St, IL' WHERE CourierID = 107;
+UPDATE Couriers SET ReceiverAddress = '666 Willow St, CO' WHERE CourierID = 108;
+UPDATE Couriers SET ReceiverAddress = '777 Cypress St, FL' WHERE CourierID = 109;
+UPDATE Couriers SET ReceiverAddress = '999 Palm St, TX' WHERE CourierID = 110;
+UPDATE Couriers SET ReceiverAddress = '111 Pinecone St, PA' WHERE CourierID = 111;
+UPDATE Couriers SET ReceiverAddress = '333 Oakridge St, NY' WHERE CourierID = 112;
+UPDATE Couriers SET ReceiverAddress = '555 Hickory St, WA' WHERE CourierID = 113;
+UPDATE Couriers SET ReceiverAddress = '222 Beech St, IL' WHERE CourierID = 114;
+UPDATE Couriers SET ReceiverAddress = '444 Fir St, GA' WHERE CourierID = 115;
+UPDATE Couriers SET ReceiverAddress = '777 Fir St, NV' WHERE CourierID = 116;
+UPDATE Couriers SET ReceiverAddress = '555 Redwood St, TX' WHERE CourierID = 117;
+UPDATE Couriers SET ReceiverAddress = '666 Gotham St, NJ' WHERE CourierID = 118;
+UPDATE Couriers SET ReceiverAddress = '111 Hero Ave, NY' WHERE CourierID = 119;
+UPDATE Couriers SET ReceiverAddress = '888 Metropolis St, IL' WHERE CourierID = 120;
+
+-- updating locationID --
+UPDATE Couriers SET LocationID = 1 WHERE ReceiverAddress LIKE '%NY%';
+UPDATE Couriers SET LocationID = 2 WHERE ReceiverAddress LIKE '%CA%';
+UPDATE Couriers SET LocationID = 3 WHERE ReceiverAddress LIKE '%IL%';
+UPDATE Couriers SET LocationID = 4 WHERE ReceiverAddress LIKE '%TX%';
+UPDATE Couriers SET LocationID = 5 WHERE ReceiverAddress LIKE '%FL%';
+UPDATE Couriers SET LocationID = 6 WHERE ReceiverAddress LIKE '%OR%';
+UPDATE Couriers SET LocationID = 7 WHERE ReceiverAddress LIKE '%WA%';
+UPDATE Couriers SET LocationID = 8 WHERE ReceiverAddress LIKE '%CO%';
+UPDATE Couriers SET LocationID = 10 WHERE ReceiverAddress LIKE '%NJ%';
+UPDATE Couriers SET LocationID = 11 WHERE ReceiverAddress LIKE '%NV%';
+UPDATE Couriers SET LocationID = 12 WHERE ReceiverAddress LIKE '%GA%';
+UPDATE Couriers SET LocationID = 13 WHERE ReceiverAddress LIKE '%PA';
+
