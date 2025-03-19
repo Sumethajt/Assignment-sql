@@ -57,3 +57,38 @@ UPDATE Payments SET PaymentDate = '2025-03-18', PackageID = 1017 WHERE CourierID
 UPDATE Payments SET PaymentDate = '2025-03-14', PackageID = 1018 WHERE CourierID = 118;
 UPDATE Payments SET PaymentDate = '2025-03-18', PackageID = 1019 WHERE CourierID = 119;
 UPDATE Payments SET PaymentDate = '2025-03-14', PackageID = 1020 WHERE CourierID = 120;
+
+alter table payments add column serviceID int null;
+UPDATE Payments p
+JOIN Couriers c ON p.CourierID = c.CourierID
+SET p.ServiceID = c.ServiceID;
+alter table payments add constraint foreign key(serviceID) references courierservices(serviceID);
+
+UPDATE Payments p
+JOIN Couriers c ON p.CourierID = c.CourierID
+SET p.LocationID = c.LocationID;
+
+UPDATE Payments p
+JOIN Couriers c ON p.CourierID = c.CourierID
+SET p.PACKAGEID = c.PACKAGEID;
+
+UPDATE Payments p
+JOIN Couriers c ON p.CourierID = c.CourierID
+SET p.PaymentDate = DATE_SUB(c.ShipmentDate, INTERVAL 1 DAY);
+
+ALTER TABLE Payments MODIFY COLUMN PaymentDate DATE NULL;
+ALTER TABLE Payments MODIFY COLUMN amount decimal(10,2) NULL;
+ALTER TABLE Payments MODIFY COLUMN PackageID int NULL;
+
+INSERT INTO Payments (PaymentID, CourierID, LocationID)
+VALUES
+(16, 116, (SELECT LocationID FROM Couriers WHERE CourierID = 116)),
+(17, 117, (SELECT LocationID FROM Couriers WHERE CourierID = 117)),
+(18, 118, (SELECT LocationID FROM Couriers WHERE CourierID = 118)),
+(19, 119, (SELECT LocationID FROM Couriers WHERE CourierID = 119)),
+(20, 120, (SELECT LocationID FROM Couriers WHERE CourierID = 120));
+
+UPDATE Payments p
+JOIN Package c ON p.PackageID = c.PackageID
+JOIN CourierServices s ON p.ServiceID = s.ServiceID
+SET p.Amount = ROUND(c.Weight * s.Cost*2, 2);
