@@ -94,3 +94,10 @@ UPDATE Payments p
 JOIN Package c ON p.PackageID = c.PackageID
 JOIN CourierServices s ON p.ServiceID = s.ServiceID
 SET p.Amount = ROUND(c.Weight * s.Cost*2, 2);
+
+-- adding employeeID --
+alter table payments add column EmployeeID Int;
+alter table payments add constraint foreign key(EmployeeID) references Employees(EmployeeID);
+UPDATE Payments p
+JOIN Couriers c ON p.CourierID = c.CourierID
+SET p.EmployeeID = c.EmployeeID;
