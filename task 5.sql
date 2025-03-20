@@ -43,15 +43,3 @@ where  p1.weight > (select max(p2.weight)
 					from package p2
                     inner join couriers c2 on c2.packageID = p2.packageID 
                     where c2.sendername = 'Diana ross');
--- -----------------------------
-SELECT PackageID, Weight 
-FROM Package 
-WHERE Weight > (SELECT AVG(Weight) FROM Package);
-
-SELECT c.CourierID, c.SenderName, c.ReceiverName, c.Status, p.Weight, p.PackageID 
-FROM Couriers c  
-INNER JOIN Package p ON c.PackageID = p.PackageID  
-WHERE p.Weight IS NOT NULL  
-AND p.Weight > (SELECT AVG(Weight) FROM Package WHERE Weight IS NOT NULL);
-
-SELECT AVG(salary) FROM employees;
