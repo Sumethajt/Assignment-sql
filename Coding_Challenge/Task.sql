@@ -1,4 +1,4 @@
--- task 5 retrieves a list of available pets (those marked as available for adoption) --
+-- task 5 
 SELECT Name, Age, Breed, Type 
 FROM Pets 
 WHERE AvailableForAdoption = 1;
@@ -10,18 +10,6 @@ JOIN AdoptionEvents e ON p.EventID = e.EventID
 WHERE e.EventID = 1; 
 
 -- task 7--
-DELIMITER //
-CREATE PROCEDURE UpdateShelterInfo(
-    IN shelterID INT, 
-    IN newName VARCHAR(255), 
-    IN newLocation VARCHAR(255)
-)
-BEGIN
-    UPDATE Shelters
-    SET Name = newName, Location = newLocation
-    WHERE ShelterID = shelterID;
-END //
-DELIMITER ;
 
 
 -- Task 8
