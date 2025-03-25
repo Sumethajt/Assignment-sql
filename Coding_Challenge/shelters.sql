@@ -17,4 +17,3 @@ INSERT INTO Shelters (ShelterID, Name, Location) VALUES
 (8,'Hopeful Companions', 'Seattle');
 
 select * from shelters;
-DELETE FROM Shelters;
