@@ -1,4 +1,4 @@
-CREATE TABLE Participants (
+CREATE TABLE IF NOT EXISTS Participants (
     ParticipantID INT PRIMARY KEY AUTO_INCREMENT,
     ParticipantName VARCHAR(255) NOT NULL,
     ParticipantType ENUM('Shelter', 'Adopter') NOT NULL,
