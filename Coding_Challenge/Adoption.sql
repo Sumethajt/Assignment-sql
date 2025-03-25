@@ -1,4 +1,4 @@
-CREATE TABLE Adoptions (
+CREATE TABLE IF NOT EXISTS Adoptions (
     AdoptionID INT PRIMARY KEY AUTO_INCREMENT,
     PetID INT,
     AdopterID INT,
