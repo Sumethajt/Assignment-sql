@@ -1,4 +1,4 @@
-CREATE TABLE PetShelter (
+CREATE TABLE IF NOT EXISTS PetShelter (
     PetID INT,
     ShelterID INT,
     PRIMARY KEY (PetID, ShelterID),
