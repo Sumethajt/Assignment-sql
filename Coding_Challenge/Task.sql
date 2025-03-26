@@ -10,7 +10,26 @@ JOIN AdoptionEvents e ON p.EventID = e.EventID
 WHERE e.EventID = 1; 
 
 -- task 7--
+DROP PROCEDURE IF EXISTS UpdateShelterInfo;
+Delimiter //
 
+create  procedure updateshelterinfo(
+in p_Shelterid int,in p_Newname varchar(100),
+    in p_Newlocation varchar(255)
+)
+Begin
+if (select count(*) from Shelters where ShelterID = p_Shelterid) = 0 then
+        signal sqlstate '45000'
+        set message_text = 'Error: Shelter ID not found';
+    else
+        -- Update  info
+        Update Shelters set Name = p_NewName, Location = p_NewLocation
+        where ShelterID = p_ShelterID;
+    end if;
+end //
+
+Delimiter ;
+call updateshelterinfo(2, 'Furry Friends Rescue', 'Los Angeles');
 
 -- Task 8
 SELECT s.Name AS ShelterName, COALESCE(SUM(d.DonationAmount), 0) AS TotalDonation
