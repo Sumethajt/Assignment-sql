@@ -118,6 +118,50 @@ public class ValidationService {
         }
     }
 
+    public static void validateDates(LocalDate startDate, LocalDate endDate) throws ValidationException {
+        if (startDate.isAfter(endDate)) {
+            throw new ValidationException("Invalid payroll period: Start date cannot be after end date.");
+        }
+    }
+
+    public static void validateNetSalary(double basicSalary, double overtimePay, double deductions, double netSalary) throws ValidationException {
+        double expectedNetSalary = basicSalary + overtimePay - deductions;
+        if (Math.abs(expectedNetSalary - netSalary) > 0.01) {
+            throw new ValidationException("Net salary calculation is incorrect. Expected: " + expectedNetSalary + ", Provided: " + netSalary);
+        }
+    }
+
+    public static void validatePayrollData(Payroll payroll) throws ValidationException {
+        if (payroll == null) {
+            throw new ValidationException("Payroll data cannot be null.");
+        }
+
+        validateEmployeeID(payroll.getEmployeeID());
+        validateDates(payroll.getPayPeriodStartDate(), payroll.getPayPeriodEndDate());
+        validateAmount(payroll.getBasicSalary());
+        validateAmount(payroll.getOvertimePay());
+        validateAmount(payroll.getDeductions());
+        validateAmount(payroll.getNetSalary());
+        validateNetSalary(payroll.getBasicSalary(), payroll.getOvertimePay(), payroll.getDeductions(), payroll.getNetSalary());
+    }
+
+    public static void validateTaxableIncome(double taxableIncome) throws ValidationException {
+        if (taxableIncome < 0) {
+            throw new ValidationException("Taxable income cannot be negative.");
+        }
+    }
+
+    public static void validateTax(Tax tax) throws ValidationException {
+        if (tax == null) {
+            throw new ValidationException("Tax object cannot be null.");
+        }
+
+        validateEmployeeID(tax.getEmployeeID());
+        validateTaxYear(tax.getTaxYear());
+        validateTaxableIncome(tax.getTaxableIncome());
+    }
+
+
 
 
 
