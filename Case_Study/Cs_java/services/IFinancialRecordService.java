@@ -18,4 +18,14 @@ public interface IFinancialRecordService {
             throws FinancialRecordException;
 
     List<FinancialRecord> getFinancialRecordsForDate(LocalDate recordDate);
+
+    public double calculateTotalRevenue();
+
+    public double calculateTotalExpenses();
+
+    public double calculateNetBalance();
+
+    void updateFinancialRecord(FinancialRecord record) throws InvalidInputException;
+
+    void deleteFinancialRecord(int recordId) throws FinancialRecordException;
 }
