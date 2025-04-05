@@ -12,4 +12,5 @@ public interface IPayrollService {
     Payroll getPayrollById(int payrollId) throws PayrollGenerationException;
     List<Payroll> getPayrollsForEmployee(int employeeId) throws EmployeeNotFoundException;
     List<Payroll> getPayrollsForPeriod(LocalDate startDate, LocalDate endDate);
+    public void addPayroll(Payroll payroll) throws PayrollGenerationException;
 }
