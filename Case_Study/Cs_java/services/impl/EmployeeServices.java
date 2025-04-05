@@ -1,57 +1,59 @@
 package services.impl;
 
+import dao.IEmployeeDAO;
+import dao.ITaxDAO;
 import entities.Employee;
 import exceptions.EmployeeNotFoundException;
 import exceptions.InvalidInputException;
 import services.IEmployeeService;
 import validation.ValidationService;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class EmployeeService implements IEmployeeService {
-    private Map<Integer, Employee> employees = new HashMap<>();
+    private IEmployeeDAO employeeDAO;
+
+    public EmployeeService(IEmployeeDAO employeeDAO) {
+        this.employeeDAO = employeeDAO;
+    }
 
     @Override
-    public Employee getEmployeeById(int employeeId) throws EmployeeNotFoundException { // Fixed method name
+    public Employee getEmployeeById(int employeeId) throws EmployeeNotFoundException {
         ValidationService.validateEmployeeID(employeeId);
-        if (!employees.containsKey(employeeId)) {
+        Employee employee = employeeDAO.getEmployeeById(employeeId);
+        if (employee == null) {
             throw new EmployeeNotFoundException("Employee with ID " + employeeId + " not found.");
         }
-        return employees.get(employeeId);
+        return employee;
     }
 
     @Override
-    public List<Employee> getAllEmployees() { // Fixed method name
-        return new ArrayList<>(employees.values());
+    public List<Employee> getAllEmployees() {
+        return employeeDAO.getAllEmployees();
     }
 
     @Override
-    public void addEmployee(Employee employee) throws InvalidInputException { // Fixed method name
+    public void addEmployee(Employee employee) throws InvalidInputException {
         ValidationService.validateEmployeeData(employee);
-        if (employee == null || employee.getFirstName().isEmpty()) {
-            throw new InvalidInputException("Invalid employee data provided.");
-        }
-        employees.put(employee.getEmployeeID(), employee);
+        employeeDAO.addEmployee(employee);
     }
 
     @Override
-    public void updateEmployee(Employee employee) throws EmployeeNotFoundException { // Fixed method name
+    public void updateEmployee(Employee employee) throws EmployeeNotFoundException {
         ValidationService.validateEmployeeData(employee);
-        if (!employees.containsKey(employee.getEmployeeID())) {
-            throw new EmployeeNotFoundException("Employee not found for update.");
+        if (employeeDAO.getEmployeeById(employee.getEmployeeID()) == null) {
+            throw new EmployeeNotFoundException("Employee with ID " + employee.getEmployeeID() + " not found.");
         }
-        employees.put(employee.getEmployeeID(), employee);
+        employeeDAO.updateEmployee(employee);
     }
 
     @Override
-    public void removeEmployee(int employeeId) throws EmployeeNotFoundException { // Fixed method name
+    public void removeEmployee(int employeeId) throws EmployeeNotFoundException {
         ValidationService.validateEmployeeID(employeeId);
-        if (!employees.containsKey(employeeId)) {
-            throw new EmployeeNotFoundException("Employee not found for removal.");
+        if (employeeDAO.getEmployeeById(employeeId) == null) {
+            throw new EmployeeNotFoundException("Employee with ID " + employeeId + " not found.");
         }
-        employees.remove(employeeId);
+        employeeDAO.removeEmployee(employeeId);
     }
+
 }
