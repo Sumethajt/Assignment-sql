@@ -5,8 +5,7 @@ import dao.impl.TaxDAO;
 import entities.Employee;
 import entities.Tax;
 import exceptions.EmployeeNotFoundException;
-import services.IEmployeeService;
-import services.impl.EmployeeService;
+import report.ReportGenerator;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,7 +16,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         IEmployeeDAO employeeDAO = new EmployeeDAO();
         ITaxDAO taxDAO = new TaxDAO();
-        IEmployeeService employeeService = new EmployeeService(employeeDAO);
+        ReportGenerator reportGenerator = new ReportGenerator();
 
         while (true) {
             System.out.println("\n=== Tax & Employee Management System ===");
@@ -30,7 +29,8 @@ public class Main {
             System.out.println("7. Update Tax Record");
             System.out.println("8. Delete Tax Record");
             System.out.println("9. Remove Employee");
-            System.out.println("10. Exit");
+            System.out.println("10. Generate Reports");
+            System.out.println("11. Exit");
             System.out.print("Choose an option: ");
 
             int choice = scanner.nextInt();
@@ -60,19 +60,16 @@ public class Main {
                 case 8:
                     deleteTaxRecord(scanner, taxDAO);
                     break;
-                case 9:
-                    System.out.println("Exiting the system...");
-                case 10:
-                    System.out.print("Enter Employee ID to remove: ");
-                    int employeeId = scanner.nextInt();
-                    try {
-                        employeeService.removeEmployee(employeeId);
-                        System.out.println("Employee removed successfully.");
-                    } catch (EmployeeNotFoundException e) {
-                        System.out.println("Error: " + e.getMessage());
-                    }
+                 case 9:
+                    removeEmployee(scanner,employeeDAO);
                     break;
-
+                case 10:
+                    reportGenerate(scanner, reportGenerator);
+                    break;
+                case 11:
+                    System.out.println("Exiting the system...");
+                    System.exit(0);
+                    break;
                 default:
                     System.out.println("Invalid option. Please try again.");
             }
@@ -182,6 +179,30 @@ public class Main {
         int taxId = scanner.nextInt();
         taxDAO.deleteTaxRecord(taxId);
         System.out.println("Tax record deleted.");
+    }
+    
+    private static void removeEmployee(Scanner scanner, IEmployeeDAO employeeDAO){
+        System.out.println("Enter EmployeeID to remove Employee: ");
+        int employeeId = scanner.nextInt();
+        scanner.nextLine();
+        try {
+            employeeDAO.removeEmployee(employeeId);
+            System.out.println("Employee removed successfully.");
+        } catch (EmployeeNotFoundException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    private static void reportGenerate(Scanner scanner,ReportGenerator reportGenerator) {
+        try {
+            System.out.println("Enter the EmployeeID to generate report:");
+            int EmployeeID = scanner.nextInt();
+            ReportGenerator.generatePayrollReport(EmployeeID);
+            ReportGenerator.generateTaxReport(EmployeeID);
+            ReportGenerator.generateFinancialRecordReport(EmployeeID);
+        } catch (ReportGenerationException e) {
+            System.out.println("Error generating report: " + e.getMessage());
+        }
     }
 }
 
