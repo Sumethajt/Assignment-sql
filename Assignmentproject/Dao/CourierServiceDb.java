@@ -375,8 +375,90 @@ public class CourierServiceDb {
         return courierId ;
     }
 
+   public boolean updateUserContactInfo(int userId, String ContactNumber, String address, String email) {
+        String sql = "UPDATE Users SET ContactNumber = ?, address = ?, email = ? WHERE userID = ?";
 
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
+            stmt.setString(1, ContactNumber);
+            stmt.setString(2, address);
+            stmt.setString(3, email);
+            stmt.setInt(4, userId);
 
-    // Additional report generation methods can be added here, such as shipment status reports, revenue reports, etc.
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+
+        } catch (SQLException e) {
+            System.out.println("❌ Database Error: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public void displayDeliveryHistory(String trackingNumber) {
+        String sql = "SELECT * FROM Couriers WHERE trackingNumber = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, trackingNumber);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                System.out.println("\n📦 Delivery History:");
+                System.out.println("Courier ID: " + rs.getInt("courierID"));
+                System.out.println("Sender: " + rs.getString("senderName"));
+                System.out.println("Receiver: " + rs.getString("receiverName"));
+                System.out.println("Status: " + rs.getString("status"));
+                System.out.println("Order Placement Date: " + rs.getDate("OrderPlacementDate"));
+                System.out.println("Delivery Date: " + rs.getDate("deliveryDate"));
+                System.out.println("Shipment Date: " + rs.getDate("shipmentDate"));
+            } else {
+                System.out.println("⚠ No delivery record found for tracking number: " + trackingNumber);
+            }
+        } catch (SQLException e) {
+            System.out.println("❌ Error fetching delivery history: " + e.getMessage());
+        }
+    }
+
+    public void generateShipmentStatusReport() {
+        String sql = "SELECT status, COUNT(*) AS count FROM Couriers GROUP BY status";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            System.out.println("\n🚚 Shipment Status Report:");
+            while (rs.next()) {
+                String status = rs.getString("status");
+                int count = rs.getInt("count");
+                System.out.printf("%-20s : %d%n", status, count);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("❌ Error generating report: " + e.getMessage());
+        }
+    }
+
+    public void generateRevenueReport() {
+        String sql = "SELECT l.locationName, SUM(p.amount) AS totalRevenue " +
+                "FROM Payments p JOIN Locations l ON p.locationID = l.locationID " +
+                "GROUP BY l.locationName";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            System.out.println("\n💰 Revenue Report by Location:");
+            while (rs.next()) {
+                String location = rs.getString("locationName");
+                double revenue = rs.getDouble("totalRevenue");
+                System.out.printf("%-20s : ₹%.2f%n", location, revenue);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("❌ Error generating revenue report: " + e.getMessage());
+        }
+    }
+
 }
