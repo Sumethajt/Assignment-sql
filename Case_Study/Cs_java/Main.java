@@ -30,7 +30,10 @@ public class Main {
             System.out.println("8. Delete Tax Record");
             System.out.println("9. Remove Employee");
             System.out.println("10. Generate Reports");
-            System.out.println("11. Exit");
+            System.out.println("11. Calculate Gross Salary");
+            System.out.println("12. Calculate Net salary");
+            System.out.println("13. Calculate Tax");
+            System.out.println("14. Exit");
             System.out.print("Choose an option: ");
 
             int choice = scanner.nextInt();
@@ -67,9 +70,19 @@ public class Main {
                     reportGenerate(scanner, reportGenerator);
                     break;
                 case 11:
+                    calculateGrossSalary(scanner, payrollDAO);
+                    break;
+                case 12:
+                    calculateNetSalary(scanner, payrollDAO);
+                    break;
+                case 13:
+                    calculateTax(scanner, taxDAO);
+                    break;
+                case 14:
                     System.out.println("Exiting the system...");
                     System.exit(0);
                     break;
+
                 default:
                     System.out.println("Invalid option. Please try again.");
             }
@@ -204,5 +217,42 @@ public class Main {
             System.out.println("Error generating report: " + e.getMessage());
         }
     }
+    private static void calculateGrossSalary(Scanner scanner, IPayrollDAO payrollDAO) {
+        System.out.print("Enter Employee ID: ");
+        int employeeId = scanner.nextInt();
+        scanner.nextLine();
+
+        try {
+            double grossSalary = payrollDAO.calculateGrossSalaryByEmployeeId(employeeId);
+            System.out.println("Gross Salary for Employee ID " + employeeId + ": $" + grossSalary);
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    private static void calculateNetSalary(Scanner scanner, IPayrollDAO payrollDAO){
+        System.out.print("Enter Employee ID: ");
+        int employeeId = scanner.nextInt();
+        scanner.nextLine();
+
+        try {
+
+            double netSalary = payrollDAO.calculateNetSalaryByEmployeeId(employeeId);
+            System.out.println("Net Salary for Employee ID " + employeeId + ": $" + netSalary);
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    private static void calculateTax(Scanner scanner , ITaxDAO taxDAO){
+        System.out.println("Enter the Taxable income: ");
+        double taxableIncome = scanner.nextDouble();
+        scanner.nextLine();
+            double taxAmount = taxDAO.calculateTax(taxableIncome);
+            System.out.println("TaxAmount for the taxableIncome " + taxableIncome + ": $" + taxAmount);
+
+    }
+
+
 }
 
