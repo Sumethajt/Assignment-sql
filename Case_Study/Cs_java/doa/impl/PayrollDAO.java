@@ -116,43 +116,6 @@ public class PayrollDAO implements IPayrollDAO {
     }
 
     @Override
-    public void generatePayroll(int employeeId, LocalDate startDate, LocalDate endDate) {
-        String query = "INSERT INTO Payroll (EmployeeID, PayPeriodStartDate, PayPeriodEndDate, BasicSalary, OvertimePay, Deductions, NetSalary) VALUES (?, ?, ?, ?, ?, ?, ?)";
-
-        ValidationService.validateEmployeeID(employeeId);
-
-        try (Connection conn = DatabaseContext.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-
-            // Placeholder values (fetch real salary data in a real system)
-            double basicSalary = 50000;
-            double overtimePay = 5000;
-            double deductions = 3000;
-            double netSalary = basicSalary + overtimePay - deductions;
-
-            stmt.setInt(1, employeeId);
-            stmt.setDate(2, Date.valueOf(startDate));
-            stmt.setDate(3, Date.valueOf(endDate));
-            stmt.setDouble(4, basicSalary);
-            stmt.setDouble(5, overtimePay);
-            stmt.setDouble(6, deductions);
-            stmt.setDouble(7, netSalary);
-
-            int affectedRows = stmt.executeUpdate();
-            if (affectedRows > 0) {
-                try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        LOGGER.info("Payroll generated with ID: " + generatedKeys.getInt(1));
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error generating payroll", e);
-            throw new DatabaseException("Unable to generate payroll: " + e.getMessage());
-        }
-    }
-
-    @Override
     public void generatePayroll(int employeeId, LocalDate startDate, LocalDate endDate, double basicSalary, double overtimePay, double deductions) {
         String query = "INSERT INTO Payroll (EmployeeID, PayPeriodStartDate, PayPeriodEndDate, BasicSalary, OvertimePay, Deductions, NetSalary) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
@@ -181,7 +144,6 @@ public class PayrollDAO implements IPayrollDAO {
         }
     }
 
-    // ✅ Utility Method: Extract Payroll Object from ResultSet
     private Payroll extractPayrollFromResultSet(ResultSet rs) throws SQLException {
         Payroll payroll = new Payroll(
                 rs.getInt("EmployeeID"),
@@ -194,5 +156,44 @@ public class PayrollDAO implements IPayrollDAO {
         );
         payroll.setPayrollID(rs.getInt("PayrollID"));
         return payroll;
+    }
+
+    public double calculateGrossSalaryByEmployeeId(int employeeId) throws SQLException {
+        String query = "SELECT BasicSalary, OvertimePay FROM Payroll WHERE EmployeeID = ?";
+        try (Connection conn = DatabaseContext.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, employeeId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    double basicSalary = rs.getDouble("BasicSalary");
+                    double overtimePay = rs.getDouble("OvertimePay");
+                    return basicSalary + overtimePay;
+                } else {
+                    throw new SQLException("No payroll record found for Employee ID " + employeeId);
+                }
+            }
+        }
+    }
+
+    public double calculateNetSalaryByEmployeeId(int employeeId) throws SQLException {
+        double grossSalary = calculateGrossSalaryByEmployeeId(employeeId); // existing method
+        double deduction = 0.0;
+
+        String query = "SELECT Deduction FROM Payroll WHERE EmployeeID = ? ORDER BY PayPeriodEndDate DESC LIMIT 1";
+
+        try (Connection conn = DatabaseContext.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, employeeId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    deduction = rs.getDouble("Deduction");
+                }
+            }
+        }
+
+        return grossSalary - deduction;
     }
 }
