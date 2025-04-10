@@ -10,11 +10,8 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class PayrollDAO implements IPayrollDAO {
-    private static final Logger LOGGER = Logger.getLogger(PayrollDAO.class.getName());
 
     @Override
     public void addPayroll(Payroll payroll) {
@@ -41,7 +38,7 @@ public class PayrollDAO implements IPayrollDAO {
                 }
             }
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error adding payroll", e);
+            System.out.println("Error adding payroll", e.getMessage());
             throw new DatabaseException("Unable to add payroll: " + e.getMessage());
         }
     }
@@ -61,7 +58,7 @@ public class PayrollDAO implements IPayrollDAO {
                 }
             }
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error fetching payroll by ID", e);
+            System.out.println("Error fetching payroll by ID" + e.getMessage());
             throw new DatabaseException("Unable to retrieve payroll: " + e.getMessage());
         }
         return null;
@@ -83,7 +80,7 @@ public class PayrollDAO implements IPayrollDAO {
                 }
             }
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error fetching payrolls for employee", e);
+            System.out.println( "Error fetching payrolls for employee" + e.getMessage());
             throw new DatabaseException("Unable to retrieve payroll records: " + e.getMessage());
         }
         return payrolls;
@@ -109,7 +106,7 @@ public class PayrollDAO implements IPayrollDAO {
                 }
             }
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error fetching payrolls for period", e);
+            System.out.println("Error fetching payrolls for period" + e.getMessage());
             throw new DatabaseException("Unable to retrieve payroll records: " + e.getMessage());
         }
         return payrolls;
